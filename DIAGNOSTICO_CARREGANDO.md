@@ -91,13 +91,7 @@ Se o JS carregasse, você veria "Carregando..." (spinner do React) e, em até 8 
 
 ## Correção aplicada (base path)
 
-O workflow `.github/workflows/deploy.yml` foi ajustado para usar **path absoluto**:
-
-```yaml
-VITE_BASE_PATH: /${{ github.event.repository.name }}/
-VITE_APP_BASENAME: /${{ github.event.repository.name }}/
-```
-
-Isso evita 404 nos assets quando o site é servido em `https://usuario.github.io/agenda_medica/`.
+1. **Workflow** usa path relativo (`VITE_BASE_PATH: ./`) – GitHub Pages resolve melhor.
+2. **Plugin no Vite** injeta `<base href="/agenda_medica/">` no HTML – corrige resolução de URLs relativas com ou sem barra no final.
 
 **Após essa alteração:** faça um novo push para disparar o deploy.
