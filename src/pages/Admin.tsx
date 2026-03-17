@@ -4,6 +4,7 @@ import { isAdmin, isAttendant } from '../lib/auth'
 import AdminDoctors from './admin/AdminDoctors'
 import AdminRoles from './admin/AdminRoles'
 import AdminUsers from './admin/AdminUsers'
+import AdminUsuariosPrivilegios from './admin/AdminUsuariosPrivilegios'
 import AdminSlots from './admin/AdminSlots'
 import AdminAppointments from './admin/AdminAppointments'
 
@@ -45,6 +46,11 @@ export default function Admin({ profile }: AdminProps) {
         <Link to={`${base}/usuarios`} className={linkClass(`${base}/usuarios`)}>
           Usuários
         </Link>
+        {admin && (
+          <Link to={`${base}/usuarios-privilegios`} className={linkClass(`${base}/usuarios-privilegios`)}>
+            Usuários e privilégios
+          </Link>
+        )}
         <Link to={`${base}/consultas`} className={linkClass(`${base}/consultas`)}>
           Consultas
         </Link>
@@ -53,6 +59,7 @@ export default function Admin({ profile }: AdminProps) {
         <Route index element={attendantOnly ? <Navigate to={`${base}/consultas`} replace /> : <AdminDoctors />} />
         <Route path="funcoes" element={admin ? <AdminRoles /> : <Navigate to={`${base}/consultas`} replace />} />
         <Route path="usuarios" element={<AdminUsers />} />
+        <Route path="usuarios-privilegios" element={<AdminUsuariosPrivilegios profile={profile} />} />
         <Route path="horarios" element={admin ? <AdminSlots /> : <Navigate to={`${base}/consultas`} replace />} />
         <Route path="consultas" element={<AdminAppointments />} />
       </Routes>

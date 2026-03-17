@@ -1,8 +1,14 @@
-# Correção: Menu Cadastro
+# Correção: Menu Cadastro e Acesso Admin
 
 ## O que foi alterado
 
-### 1. Menu Cadastro visível para TODOS os usuários logados
+### 1. Admin vendo "Acesso restrito"
+- Estado de carregamento: mostra "Carregando..." enquanto o perfil é carregado
+- Usuário único: se for o único usuário, o hub de Cadastro é exibido
+- Instruções SQL: quando bloqueado, exibe o SQL para corrigir o `role` no banco
+- Link para Configuração inicial: permite completar o setup como administrador
+
+### 2. Menu Cadastro visível para TODOS os usuários logados
 - Antes: só aparecia para Admin e Secretária
 - Agora: aparece para qualquer usuário logado
 - Segurança: a página `/cadastro` continua verificando acesso e mostra "Acesso restrito" para pacientes
@@ -10,7 +16,11 @@
 ### 2. Edge Function create-user
 - Ao criar usuário com função Administrador, agora atualiza também `role = 'admin'` no perfil
 
-### 3. Migration para corrigir admins existentes
+### 3. Nova página: Usuários e privilégios (apenas Admin)
+- Admin → "Usuários e privilégios": lista todos os usuários com função e permissões
+- Acesso restrito a administradores (secretárias são redirecionadas)
+
+### 4. Migration para corrigir admins existentes
 - `006_fix_admin_role.sql` – corrige perfis que têm `role_id` de Administrador mas `role` incorreto
 
 ---

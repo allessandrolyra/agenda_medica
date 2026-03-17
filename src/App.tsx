@@ -21,6 +21,7 @@ import Health from './pages/Health'
 function App() {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [profileLoaded, setProfileLoaded] = useState(false)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -54,9 +55,11 @@ function App() {
   useEffect(() => {
     if (!user) {
       setProfile(null)
+      setProfileLoaded(false)
       return
     }
     let cancelled = false
+    setProfileLoaded(false)
     const load = async () => {
       try {
         const { data: profileData, error } = await supabase
@@ -67,19 +70,22 @@ function App() {
 
         if (cancelled) return
         if (error) throw error
-        let profile = profileData as Profile | null
-        if (!profile) {
+        let p = profileData as Profile | null
+        if (!p) {
           setProfile(null)
+          setProfileLoaded(true)
           return
         }
-        if (profile.role_id) {
-          const { data: roleData } = await supabase.from('roles').select('id, name').eq('id', profile.role_id).single()
+        if (p.role_id) {
+          const { data: roleData } = await supabase.from('roles').select('id, name').eq('id', p.role_id).single()
           if (cancelled) return
-          if (roleData) profile = { ...profile, role_detail: roleData as Role }
+          if (roleData) p = { ...p, role_detail: roleData as Role }
         }
-        setProfile(profile)
+        setProfile(p)
       } catch {
         if (!cancelled) setProfile(null)
+      } finally {
+        if (!cancelled) setProfileLoaded(true)
       }
     }
     load()
@@ -119,7 +125,7 @@ function App() {
             element={user ? <MyAppointments /> : <Navigate to="/login" />}
           />
           <Route path="agenda" element={user ? <AttendantAgenda profile={profile} /> : <Navigate to="/login" />} />
-          <Route path="cadastro" element={user ? <Cadastro profile={profile} /> : <Navigate to="/login" />} />
+          <Route path="cadastro" element={user ? <Cadastro profile={profile} profileLoaded={profileLoaded} /> : <Navigate to="/login" />} />
           <Route path="admin/*" element={user ? <Admin profile={profile} /> : <Navigate to="/login" />} />
           <Route path="health" element={<Health />} />
         </Route>
