@@ -21,7 +21,12 @@ export default function Login() {
       navigate('/dashboard')
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Erro ao entrar'
-      setError(msg)
+      const isInvalidCreds = /invalid login credentials/i.test(msg)
+      setError(
+        isInvalidCreds
+          ? 'Email ou senha incorretos. Confira os dados ou use "Esqueci a senha" para redefinir.'
+          : msg
+      )
       logger.error('Erro no login', { email, msg })
     } finally {
       setLoading(false)
@@ -65,6 +70,11 @@ export default function Login() {
         >
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
+        <p className="text-center">
+          <Link to="/forgot-password" className="text-sm text-emerald-600 hover:underline">
+            Esqueci a senha
+          </Link>
+        </p>
       </form>
       <p className="mt-4 text-sm text-slate-600">
         Não tem conta? <Link to="/register" className="text-emerald-600 hover:underline">Cadastre-se</Link>

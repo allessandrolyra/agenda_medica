@@ -49,6 +49,7 @@ export default function SetupAdmin() {
           data: {
             full_name: form.fullName,
             role: 'paciente',
+            data_consent: true,
           },
         },
       })

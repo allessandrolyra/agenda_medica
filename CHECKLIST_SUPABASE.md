@@ -68,6 +68,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 - [ ] Em **Redirect URLs**, adicionar:
   - `http://localhost:5173/**`
   - `https://seu-usuario.github.io/**` (ajustar depois do deploy)
+- [ ] **Esqueci a senha**: as URLs acima cobrem `/reset-password`. Se usar subpath (ex: GitHub Pages), adicione também: `https://seu-usuario.github.io/agenda_medica/reset-password`
 
 ---
 

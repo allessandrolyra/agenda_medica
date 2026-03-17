@@ -76,26 +76,35 @@ CREATE INDEX idx_appointments_status ON appointments(status);
 CREATE INDEX idx_availability_doctor ON availability_slots(doctor_id);
 CREATE INDEX idx_blocked_dates ON blocked_dates(doctor_id, blocked_date);
 
--- Função para criar perfil ao registrar
-CREATE OR REPLACE FUNCTION handle_new_user()
-RETURNS TRIGGER AS $$
+-- Função para criar perfil ao registrar (SECURITY DEFINER + search_path conforme docs Supabase)
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
 BEGIN
-  INSERT INTO profiles (id, email, full_name, phone, role, data_consent)
+  INSERT INTO public.profiles (id, email, full_name, phone, role, data_consent)
   VALUES (
     NEW.id,
-    NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'full_name', 'Usuário'),
+    COALESCE(NEW.email, ''),
+    COALESCE(NULLIF(TRIM(NEW.raw_user_meta_data->>'full_name'), ''), 'Usuário'),
     NEW.raw_user_meta_data->>'phone',
-    COALESCE((NEW.raw_user_meta_data->>'role')::user_role, 'paciente'),
+    COALESCE((NEW.raw_user_meta_data->>'role')::public.user_role, 'paciente'::public.user_role),
     COALESCE((NEW.raw_user_meta_data->>'data_consent')::boolean, false)
-  );
+  )
+  ON CONFLICT (id) DO UPDATE SET
+    full_name = EXCLUDED.full_name,
+    phone = EXCLUDED.phone,
+    data_consent = EXCLUDED.data_consent,
+    updated_at = now();
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
 
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- RLS (Row Level Security)
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
