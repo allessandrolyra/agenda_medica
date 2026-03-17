@@ -73,8 +73,9 @@ function App() {
     )
   }
 
+  const basename = import.meta.env.VITE_APP_BASENAME || import.meta.env.BASE_URL || '/'
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/" element={<Layout user={user} profile={profile} />}>
           <Route index element={<Home />} />

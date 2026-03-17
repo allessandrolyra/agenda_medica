@@ -36,7 +36,10 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          # Path RELATIVO para assets - GitHub Pages não resolve paths absolutos
+          VITE_BASE_PATH: ./
+          # Basename para React Router (nome do repo)
+          VITE_APP_BASENAME: /${{ github.event.repository.name }}/
         run: |
           if [ -z "$VITE_SUPABASE_URL" ] || [ "$VITE_SUPABASE_URL" = "" ]; then
             echo "ERRO: Configure os secrets VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY em Settings > Secrets"
