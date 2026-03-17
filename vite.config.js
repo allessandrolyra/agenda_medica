@@ -7,4 +7,9 @@ export default defineConfig({
     plugins: [react()],
     base: process.env.VITE_BASE_PATH || '/',
     resolve: { alias: { '@': path.resolve(__dirname, './src') } },
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    },
 });

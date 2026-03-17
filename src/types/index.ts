@@ -1,5 +1,12 @@
 export type UserRole = 'paciente' | 'admin'
-export type AppointmentStatus = 'agendada' | 'confirmada' | 'cancelada' | 'realizada'
+export type AppointmentStatus =
+  | 'agendada'
+  | 'confirmada'
+  | 'cancelada'
+  | 'realizada'
+  | 'pending_confirmation'
+  | 'in_progress'
+  | 'no_show'
 
 export interface Specialty {
   id: string
@@ -27,6 +34,8 @@ export interface Profile {
   role_detail?: Role
   can_self_book?: boolean
   data_consent: boolean
+  consent_version?: string
+  consent_at?: string
   created_at: string
   updated_at: string
 }

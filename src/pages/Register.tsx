@@ -42,6 +42,8 @@ export default function Register() {
           full_name: form.fullName,
           phone: form.phone,
           data_consent: form.dataConsent,
+          consent_version: '1.0',
+          consent_at: form.dataConsent ? new Date().toISOString() : null,
           updated_at: new Date().toISOString(),
         }).eq('id', data.user.id)
       }

@@ -145,7 +145,24 @@ export default function SetupAdmin() {
           <p className="text-slate-700 mb-4">
             Você já está logado. Clique no botão abaixo para ser configurado como administrador da clínica.
           </p>
-          {error && <div className="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm">{error}</div>}
+          {error && (
+            <div className="mb-4 space-y-2">
+              <div className="p-3 rounded-lg bg-red-50 text-red-700 text-sm">{error}</div>
+              <details className="text-sm text-slate-600">
+                <summary className="cursor-pointer font-medium">Corrigir manualmente no Supabase</summary>
+                <p className="mt-2 text-xs">Execute no SQL Editor. Se você é o único usuário:</p>
+                <pre className="mt-1 p-2 bg-slate-100 rounded text-xs overflow-x-auto">
+{`UPDATE profiles SET role = 'admin', role_id = (SELECT id FROM roles WHERE name = 'Administrador' LIMIT 1)
+WHERE (SELECT COUNT(*) FROM profiles) = 1;`}
+                </pre>
+                <p className="mt-2 text-xs">Se há vários usuários, use seu email (substitua):</p>
+                <pre className="mt-1 p-2 bg-slate-100 rounded text-xs overflow-x-auto">
+{`UPDATE profiles p SET role = 'admin', role_id = (SELECT id FROM roles WHERE name = 'Administrador' LIMIT 1)
+FROM auth.users u WHERE p.id = u.id AND u.email = 'seu@email.com';`}
+                </pre>
+              </details>
+            </div>
+          )}
           <button
             onClick={handleCompleteSetup}
             disabled={completing}

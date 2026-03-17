@@ -64,22 +64,17 @@ function App() {
       try {
         const { data: profileData, error } = await supabase
           .from('profiles')
-          .select('*')
+          .select('*, role_detail:roles(id, name, description)')
           .eq('id', user!.id)
           .single()
 
         if (cancelled) return
         if (error) throw error
-        let p = profileData as Profile | null
+        const p = profileData as Profile | null
         if (!p) {
           setProfile(null)
           setProfileLoaded(true)
           return
-        }
-        if (p.role_id) {
-          const { data: roleData } = await supabase.from('roles').select('id, name').eq('id', p.role_id).single()
-          if (cancelled) return
-          if (roleData) p = { ...p, role_detail: roleData as Role }
         }
         setProfile(p)
       } catch {

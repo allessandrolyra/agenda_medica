@@ -1,0 +1,26 @@
+# Workflow: Lembretes de consulta (fallback para Supabase Free tier)
+# Executa diariamente às 8h BRT (11h UTC)
+# Requer: secrets VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY
+name: Lembretes diários
+
+on:
+  schedule:
+    - cron: '0 11 * * *'  # 08:00 BRT (11:00 UTC)
+  workflow_dispatch:
+
+jobs:
+  reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Chamar Edge Function send-reminders
+        run: |
+          URL="${{ secrets.VITE_SUPABASE_URL }}/functions/v1/send-reminders"
+          KEY="${{ secrets.VITE_SUPABASE_ANON_KEY }}"
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "Secrets não configurados. Configure VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY."
+            exit 0
+          fi
+          curl -s -X POST "$URL" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $KEY" \
+            -d '{}' | jq . || true

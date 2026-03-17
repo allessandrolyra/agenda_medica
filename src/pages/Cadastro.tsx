@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import { canAccessFullAgenda, isAdmin, isAttendant } from '../lib/auth'
 import type { Profile } from '../types'
 
@@ -10,46 +8,14 @@ interface CadastroProps {
 }
 
 export default function Cadastro({ profile, profileLoaded = true }: CadastroProps) {
-  const [isOnlyUser, setIsOnlyUser] = useState(false)
-  const showCadastro = isAdmin(profile ?? null) || isAttendant(profile ?? null) || isOnlyUser
   const showAgenda = canAccessFullAgenda(profile ?? null)
-
-  useEffect(() => {
-    if (!profileLoaded || !profile) return
-    supabase.from('profiles').select('id', { count: 'exact', head: true }).then(({ count }) => {
-      setIsOnlyUser(count === 1)
-    })
-  }, [profileLoaded, profile])
+  const isAdminOrAttendant = isAdmin(profile ?? null) || isAttendant(profile ?? null)
 
   if (!profileLoaded) {
     return (
       <div className="p-4 rounded-xl bg-slate-50 text-slate-600 flex items-center gap-3">
         <div className="animate-spin rounded-full h-6 w-6 border-2 border-slate-300 border-t-emerald-600" />
         Carregando...
-      </div>
-    )
-  }
-
-  if (!showCadastro) {
-    return (
-      <div className="p-4 rounded-xl bg-amber-50 text-amber-800 space-y-4">
-        <p>Acesso restrito. Cadastro disponível apenas para administradores e secretárias.</p>
-        <p className="text-sm">
-          Se você é o administrador e completou o setup, execute no Supabase (SQL Editor):
-        </p>
-        <pre className="p-3 bg-amber-100 rounded text-xs overflow-x-auto">
-{`UPDATE profiles p
-SET role = 'admin'::public.user_role
-FROM roles r
-WHERE p.role_id = r.id AND r.name = 'Administrador'
-  AND (p.role IS NULL OR p.role::text != 'admin');`}
-        </pre>
-        <div className="flex flex-wrap gap-4">
-          <Link to="/setup" className="inline-block text-sm font-medium text-emerald-700 hover:underline">
-            Configuração inicial (completar como administrador)
-          </Link>
-          <span className="text-sm text-amber-700">Após corrigir, atualize a página (F5).</span>
-        </div>
       </div>
     )
   }
@@ -108,6 +74,18 @@ WHERE p.role_id = r.id AND r.name = 'Administrador'
           </p>
         </Link>
       </div>
+
+      {!isAdminOrAttendant && (
+        <div className="mt-6 p-4 rounded-xl bg-slate-50 text-slate-600 text-sm">
+          <p>
+            Você vê apenas seus próprios dados. Para cadastrar usuários e gerenciar o sistema, complete a{' '}
+            <Link to="/setup" className="font-medium text-emerald-600 hover:underline">
+              configuração inicial como administrador
+            </Link>
+            .
+          </p>
+        </div>
+      )}
     </div>
   )
 }

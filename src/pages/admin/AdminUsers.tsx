@@ -18,12 +18,14 @@ export default function AdminUsers() {
   }, [])
 
   const load = async () => {
+    setError('')
     const [rolesRes, usersRes] = await Promise.all([
       supabase.from('roles').select('*').order('name'),
       supabase.from('profiles').select('*, role_detail:roles(id, name, description)').order('full_name'),
     ])
-    const rolesData = rolesRes.data || []
-    setRoles(rolesData)
+    const errs = [rolesRes.error?.message, usersRes.error?.message].filter(Boolean)
+    if (errs.length) setError(errs.join(' | '))
+    setRoles(rolesRes.data || [])
     setUsers((usersRes.data as (Profile & { role_detail?: Role })[]) || [])
     setLoading(false)
   }

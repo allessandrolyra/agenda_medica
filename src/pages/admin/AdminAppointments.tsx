@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { supabase } from '../../lib/supabase'
 import ConfirmModal from '../../components/ConfirmModal'
+import { exportToICS, exportToCSV } from '../../lib/exportAgenda'
 import type { Appointment, Doctor, Profile } from '../../types'
 
 type AppointmentWithDetails = Appointment & { doctor?: Doctor; patient?: Profile }
@@ -9,22 +10,31 @@ type ViewMode = 'lista' | 'por_medico'
 const STATUS_OPTIONS = [
   { value: '', label: 'Todos os status' },
   { value: 'agendada', label: 'Agendada' },
+  { value: 'pending_confirmation', label: 'Pendente confirmação' },
   { value: 'confirmada', label: 'Confirmada' },
-  { value: 'cancelada', label: 'Cancelada' },
+  { value: 'in_progress', label: 'Em andamento' },
   { value: 'realizada', label: 'Realizada' },
+  { value: 'no_show', label: 'Não compareceu' },
+  { value: 'cancelada', label: 'Cancelada' },
 ] as const
 
 const statusLabel: Record<string, string> = {
   agendada: 'Agendada',
+  pending_confirmation: 'Pendente confirmação',
   confirmada: 'Confirmada',
-  cancelada: 'Cancelada',
+  in_progress: 'Em andamento',
   realizada: 'Realizada',
+  no_show: 'Não compareceu',
+  cancelada: 'Cancelada',
 }
 const statusColor: Record<string, string> = {
   agendada: 'bg-amber-100 text-amber-800',
+  pending_confirmation: 'bg-yellow-100 text-yellow-800',
   confirmada: 'bg-emerald-100 text-emerald-800',
+  in_progress: 'bg-blue-100 text-blue-800',
   cancelada: 'bg-slate-100 text-slate-600',
   realizada: 'bg-blue-100 text-blue-800',
+  no_show: 'bg-red-100 text-red-800',
 }
 
 function normalizeForSearch(s: string): string {
@@ -264,6 +274,42 @@ export default function AdminAppointments() {
               Limpar filtros
             </button>
           )}
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => exportToICS(filteredAppointments.map((a) => ({
+                id: a.id,
+                patient_name: a.patient?.full_name,
+                patient_email: a.patient?.email,
+                doctor_name: a.doctor?.name,
+                appointment_date: a.appointment_date,
+                start_time: a.start_time,
+                end_time: a.end_time,
+                status: a.status,
+              })))}
+              disabled={filteredAppointments.length === 0}
+              className="text-sm px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 disabled:opacity-50"
+            >
+              Exportar ICS
+            </button>
+            <button
+              type="button"
+              onClick={() => exportToCSV(filteredAppointments.map((a) => ({
+                id: a.id,
+                patient_name: a.patient?.full_name,
+                patient_email: a.patient?.email,
+                doctor_name: a.doctor?.name,
+                appointment_date: a.appointment_date,
+                start_time: a.start_time,
+                end_time: a.end_time,
+                status: a.status,
+              })))}
+              disabled={filteredAppointments.length === 0}
+              className="text-sm px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 disabled:opacity-50"
+            >
+              Exportar CSV
+            </button>
+          </div>
           <span className="text-sm text-slate-500">
             {filteredAppointments.length} consulta{filteredAppointments.length !== 1 ? 's' : ''}
           </span>

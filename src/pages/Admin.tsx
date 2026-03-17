@@ -7,6 +7,7 @@ import AdminUsers from './admin/AdminUsers'
 import AdminUsuariosPrivilegios from './admin/AdminUsuariosPrivilegios'
 import AdminSlots from './admin/AdminSlots'
 import AdminAppointments from './admin/AdminAppointments'
+import AdminMetrics from './admin/AdminMetrics'
 
 interface AdminProps {
   profile?: Profile | null
@@ -47,9 +48,14 @@ export default function Admin({ profile }: AdminProps) {
           Usuários
         </Link>
         {admin && (
-          <Link to={`${base}/usuarios-privilegios`} className={linkClass(`${base}/usuarios-privilegios`)}>
-            Usuários e privilégios
-          </Link>
+          <>
+            <Link to={`${base}/metricas`} className={linkClass(`${base}/metricas`)}>
+              Métricas
+            </Link>
+            <Link to={`${base}/usuarios-privilegios`} className={linkClass(`${base}/usuarios-privilegios`)}>
+              Usuários e privilégios
+            </Link>
+          </>
         )}
         <Link to={`${base}/consultas`} className={linkClass(`${base}/consultas`)}>
           Consultas
@@ -61,6 +67,7 @@ export default function Admin({ profile }: AdminProps) {
         <Route path="usuarios" element={<AdminUsers />} />
         <Route path="usuarios-privilegios" element={<AdminUsuariosPrivilegios profile={profile} />} />
         <Route path="horarios" element={admin ? <AdminSlots /> : <Navigate to={`${base}/consultas`} replace />} />
+        <Route path="metricas" element={admin ? <AdminMetrics /> : <Navigate to={`${base}/consultas`} replace />} />
         <Route path="consultas" element={<AdminAppointments />} />
       </Routes>
     </div>

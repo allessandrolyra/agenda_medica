@@ -1,0 +1,19 @@
+-- Migration: Documentação para Cron de lembretes
+-- pg_cron + pg_net disponíveis em planos Supabase Pro+
+-- Para Free tier: use GitHub Actions (ver .github/workflows/reminders-cron.yml)
+
+-- Se tiver pg_cron, execute manualmente no SQL Editor:
+--
+-- 1. Habilitar: CREATE EXTENSION IF NOT EXISTS pg_cron; CREATE EXTENSION IF NOT EXISTS pg_net;
+-- 2. Criar secrets no Vault: project_url, anon_key
+-- 3. Agendar:
+--
+-- SELECT cron.schedule(
+--   'send-reminders-daily',
+--   '0 8 * * *',
+--   $$ SELECT net.http_post(
+--     url := (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'project_url') || '/functions/v1/send-reminders',
+--     headers := jsonb_build_object('Content-Type','application/json','Authorization','Bearer '||(SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'anon_key')),
+--     body := '{}'::jsonb
+--   ) AS request_id; $$
+-- );
