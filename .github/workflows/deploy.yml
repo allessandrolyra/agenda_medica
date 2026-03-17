@@ -37,9 +37,9 @@ jobs:
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          # Path RELATIVO (./) - GitHub Pages resolve melhor que absoluto
-          VITE_BASE_PATH: ./
-          # Basename para React Router (subpath do repo)
+          # Base absoluto /repo-name/ - conforme docs oficiais Vite (static-deploy)
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          # Basename para React Router (deve coincidir com base)
           VITE_APP_BASENAME: /${{ github.event.repository.name }}/
         run: |
           if [ -z "$VITE_SUPABASE_URL" ] || [ "$VITE_SUPABASE_URL" = "" ]; then

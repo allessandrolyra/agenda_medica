@@ -91,7 +91,12 @@ Se o JS carregasse, você veria "Carregando..." (spinner do React) e, em até 8 
 
 ## Correção aplicada (base path)
 
-1. **Workflow** usa path relativo (`VITE_BASE_PATH: ./`) – GitHub Pages resolve melhor.
-2. **Plugin no Vite** injeta `<base href="/agenda_medica/">` no HTML – corrige resolução de URLs relativas com ou sem barra no final.
+**Conforme docs oficiais do Vite** ([static-deploy](https://vitejs.dev/guide/static-deploy.html#github-pages)):
+
+1. **Workflow** usa base **absoluto**: `VITE_BASE_PATH: /${{ github.event.repository.name }}/`
+2. **htmlBasePlugin removido** – simplificação, menos risco de conflito
+3. Build gera paths: `/agenda_medica/assets/xxx.js`
+
+Ver `HISTORICO_CARREGANDO.md` para o histórico completo de mudanças.
 
 **Após essa alteração:** faça um novo push para disparar o deploy.
