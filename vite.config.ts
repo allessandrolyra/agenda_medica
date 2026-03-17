@@ -1,12 +1,12 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
 // Injeta <base href> para GitHub Pages: corrige resolução de paths relativos
-function htmlBasePlugin() {
+function htmlBasePlugin(): Plugin {
   return {
     name: 'html-base',
-    transformIndexHtml(html) {
+    transformIndexHtml(html: string): string {
       const base = process.env.VITE_APP_BASENAME || '/'
       if (base === '/') return html
       return html.replace('<head>', `<head>\n    <base href="${base}">`)

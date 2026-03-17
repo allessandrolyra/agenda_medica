@@ -1,6 +1,6 @@
 # 📋 Relatório de Análise de Código – Insight (Agente 08)
 
-**Data:** Verificação final antes da publicação  
+**Data:** Verificação final antes da publicação (atualizado)  
 **Objetivo:** Garantir boas práticas, performance e manutenibilidade da aplicação Agenda Médica.
 
 ---
@@ -14,6 +14,9 @@
 - **Cleanup** de subscription no `useEffect` (unsubscribe)
 - **Tailwind** para estilos consistentes e bundle enxuto
 - **Vite** para build rápido e otimizado
+- **Acessibilidade** (Layout, ConfirmModal): `aria-label`, `aria-expanded`, `role="dialog"`, `aria-modal`
+- **Tratamento de erros** no login (mensagem amigável para "Invalid login credentials")
+- **Esqueci a senha** implementado (ForgotPassword, ResetPassword)
 
 ---
 
@@ -24,6 +27,12 @@
 **Problema:** O componente fazia `return` antes de chamar os hooks (`useState`, `useEffect`), o que viola a regra de Hooks do React (hooks devem ser chamados na mesma ordem em toda renderização).
 
 **Solução:** Hooks movidos para o topo; a verificação `canSelfBook` e o `return` condicional foram colocados após todos os hooks.
+
+### 2. TypeScript no vite.config.ts (atual)
+
+**Problema:** Parâmetro `html` em `transformIndexHtml` sem tipo explícito.
+
+**Solução:** Adicionado `html: string` para evitar erro TS7006.
 
 ---
 
@@ -54,6 +63,24 @@
 
 ---
 
+## 🧪 Verificação de build e teste local
+
+| Verificação | Resultado |
+|-------------|-----------|
+| `npm run build` | ✅ Sucesso (4.28s) |
+| Bundle size | index.js ~399 KB (gzip ~111 KB), index.css ~17 KB |
+| TypeScript | ✅ Sem erros |
+| Linter | ✅ Sem erros |
+| Dev server | ✅ Inicia em http://localhost:517x |
+
+### Teste online (produção)
+
+- **URL:** https://allessandrolyra.github.io/agenda_medica/
+- **Status:** Verificar manualmente (F12 → Console para erros 404 ou de rede)
+- **Health:** `/health` depende da Edge Function do Supabase (pode retornar 404 se não configurada)
+
+---
+
 ## 📊 Resumo
 
 | Categoria | Status |
@@ -62,6 +89,8 @@
 | Performance | ✅ Adequada para o escopo atual |
 | Segurança | ✅ RLS e Auth configurados no Supabase |
 | Manutenibilidade | ✅ Código organizado e tipado |
+| Build | ✅ Compila sem erros |
+| Acessibilidade | ✅ Parcial (Layout, ConfirmModal) |
 
 ---
 
