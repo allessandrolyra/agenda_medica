@@ -53,9 +53,15 @@ function App() {
       setProfile(null)
       return
     }
-    supabase.from('profiles').select('*, role_detail:roles(id, name)').eq('id', user.id).single()
-      .then(({ data }) => setProfile(data as Profile | null))
-      .catch(() => setProfile(null))
+    const load = async () => {
+      try {
+        const { data } = await supabase.from('profiles').select('*, role_detail:roles(id, name)').eq('id', user!.id).single()
+        setProfile(data as Profile | null)
+      } catch {
+        setProfile(null)
+      }
+    }
+    load()
   }, [user])
 
   if (loading) {

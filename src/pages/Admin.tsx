@@ -1,11 +1,16 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import type { Profile } from '../types'
 import AdminDoctors from './admin/AdminDoctors'
 import AdminRoles from './admin/AdminRoles'
 import AdminUsers from './admin/AdminUsers'
 import AdminSlots from './admin/AdminSlots'
 import AdminAppointments from './admin/AdminAppointments'
 
-export default function Admin() {
+interface AdminProps {
+  profile?: Profile | null
+}
+
+export default function Admin({ profile: _profile }: AdminProps) {
   const loc = useLocation()
   const base = '/admin'
 
