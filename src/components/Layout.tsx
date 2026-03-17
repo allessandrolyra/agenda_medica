@@ -40,15 +40,13 @@ export default function Layout({ user, profile }: LayoutProps) {
           <Link to="/dashboard" className={navLinkClass} onClick={closeMenu}>
             Painel
           </Link>
+          <Link to="/cadastro" className={navLinkClass} onClick={closeMenu}>
+            Cadastro
+          </Link>
           {showAdmin && (
-            <>
-              <Link to="/cadastro" className={navLinkClass} onClick={closeMenu}>
-                Cadastro
-              </Link>
-              <Link to="/admin" className={navLinkClass} onClick={closeMenu}>
-                {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
-              </Link>
-            </>
+            <Link to="/admin" className={navLinkClass} onClick={closeMenu}>
+              {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
+            </Link>
           )}
           {showAgenda && (
             <Link to="/agenda" className={navLinkClass} onClick={closeMenu}>
@@ -111,15 +109,13 @@ export default function Layout({ user, profile }: LayoutProps) {
                 <Link to="/dashboard" className="py-3 text-slate-600 hover:text-emerald-600">
                   Painel
                 </Link>
+                <Link to="/cadastro" className="py-3 text-slate-600 hover:text-emerald-600">
+                  Cadastro
+                </Link>
                 {showAdmin && (
-                  <>
-                    <Link to="/cadastro" className="py-3 text-slate-600 hover:text-emerald-600">
-                      Cadastro
-                    </Link>
-                    <Link to="/admin" className="py-3 text-slate-600 hover:text-emerald-600">
-                      {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
-                    </Link>
-                  </>
+                  <Link to="/admin" className="py-3 text-slate-600 hover:text-emerald-600">
+                    {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
+                  </Link>
                 )}
                 {showAgenda && (
                   <Link to="/agenda" className="py-3 text-slate-600 hover:text-emerald-600">

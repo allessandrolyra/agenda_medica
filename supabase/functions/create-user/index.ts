@@ -32,7 +32,10 @@ serve(async (req) => {
     })
     if (error) return new Response(JSON.stringify({ error: error.message }), { status: 400, headers: cors })
     if (newUser?.user && role_id) {
-      await adminClient.from('profiles').update({ role_id, full_name: full_name || newUser.user.email }).eq('id', newUser.user.id)
+      const { data: roleData } = await adminClient.from('roles').select('name').eq('id', role_id).single()
+      const updates: Record<string, unknown> = { role_id, full_name: full_name || newUser.user.email }
+      if (roleData?.name === 'Administrador') updates.role = 'admin'
+      await adminClient.from('profiles').update(updates).eq('id', newUser.user.id)
     }
     return new Response(JSON.stringify({ ok: true, user_id: newUser?.user?.id }), { status: 200, headers: cors })
   } catch (e) {
