@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 import type { Profile, Role } from '../../types'
 
 export default function AdminUsers() {
+  const [searchParams] = useSearchParams()
+  const roleParam = searchParams.get('role')
   const [users, setUsers] = useState<(Profile & { role_detail?: Role })[]>([])
   const [roles, setRoles] = useState<Role[]>([])
   const [loading, setLoading] = useState(true)
@@ -19,10 +22,18 @@ export default function AdminUsers() {
       supabase.from('roles').select('*').order('name'),
       supabase.from('profiles').select('*, role_detail:roles(id, name, description)').order('full_name'),
     ])
-    setRoles(rolesRes.data || [])
+    const rolesData = rolesRes.data || []
+    setRoles(rolesData)
     setUsers((usersRes.data as (Profile & { role_detail?: Role })[]) || [])
     setLoading(false)
   }
+
+  useEffect(() => {
+    if (roleParam === 'paciente' && roles.length > 0) {
+      const pacienteRole = roles.find((r) => r.name === 'Paciente')
+      if (pacienteRole) setForm((f) => ({ ...f, role_id: pacienteRole.id }))
+    }
+  }, [roleParam, roles])
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault()

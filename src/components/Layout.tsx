@@ -40,6 +40,11 @@ export default function Layout({ user, profile }: LayoutProps) {
           <Link to="/dashboard" className={navLinkClass} onClick={closeMenu}>
             Painel
           </Link>
+          {showAdmin && (
+            <Link to="/cadastro" className={navLinkClass} onClick={closeMenu}>
+              Cadastro
+            </Link>
+          )}
           {showAgenda && (
             <Link to="/agenda" className={navLinkClass} onClick={closeMenu}>
               Agenda completa
@@ -106,6 +111,11 @@ export default function Layout({ user, profile }: LayoutProps) {
                 <Link to="/dashboard" className="py-3 text-slate-600 hover:text-emerald-600">
                   Painel
                 </Link>
+                {showAdmin && (
+                  <Link to="/cadastro" className="py-3 text-slate-600 hover:text-emerald-600">
+                    Cadastro
+                  </Link>
+                )}
                 {showAgenda && (
                   <Link to="/agenda" className="py-3 text-slate-600 hover:text-emerald-600">
                     Agenda completa

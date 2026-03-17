@@ -14,6 +14,7 @@ import BookAppointment from './pages/BookAppointment'
 import MyAppointments from './pages/MyAppointments'
 import Admin from './pages/Admin'
 import AttendantAgenda from './pages/AttendantAgenda'
+import Cadastro from './pages/Cadastro'
 import SetupAdmin from './pages/SetupAdmin'
 import Health from './pages/Health'
 
@@ -99,6 +100,7 @@ function App() {
             element={user ? <MyAppointments /> : <Navigate to="/login" />}
           />
           <Route path="agenda" element={user ? <AttendantAgenda profile={profile} /> : <Navigate to="/login" />} />
+          <Route path="cadastro" element={user ? <Cadastro profile={profile} /> : <Navigate to="/login" />} />
           <Route path="admin/*" element={user ? <Admin profile={profile} /> : <Navigate to="/login" />} />
           <Route path="health" element={<Health />} />
         </Route>

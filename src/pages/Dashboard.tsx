@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { canAccessFullAgenda, canSelfBook } from '../lib/auth'
+import { canAccessFullAgenda, canSelfBook, isAdmin, isAttendant } from '../lib/auth'
 import type { Profile } from '../types'
 
 interface DashboardProps {
@@ -9,11 +9,21 @@ interface DashboardProps {
 export default function Dashboard({ profile }: DashboardProps) {
   const showAgenda = canAccessFullAgenda(profile ?? null)
   const showAgendar = canSelfBook(profile ?? null)
+  const showCadastro = isAdmin(profile ?? null) || isAttendant(profile ?? null)
 
   return (
     <div>
       <h1 className="text-xl sm:text-2xl font-bold mb-6">Painel</h1>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {showCadastro && (
+          <Link
+            to="/cadastro"
+            className="block p-6 min-h-[100px] rounded-xl bg-emerald-50 border-2 border-emerald-200 shadow-sm hover:shadow-md hover:border-emerald-400 transition"
+          >
+            <h3 className="font-semibold text-emerald-700 mb-2">Cadastro</h3>
+            <p className="text-sm text-slate-600">Cadastre usuários, pacientes e agende consultas.</p>
+          </Link>
+        )}
         {showAgenda && (
           <Link
             to="/agenda"
