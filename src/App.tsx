@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from './lib/supabase'
 import type { User } from '@supabase/supabase-js'
-import type { Profile } from './types'
+import type { Profile, Role } from './types'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -58,8 +58,23 @@ function App() {
     }
     const load = async () => {
       try {
-        const { data } = await supabase.from('profiles').select('*, role_detail:roles(id, name)').eq('id', user!.id).single()
-        setProfile(data as Profile | null)
+        const { data: profileData, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user!.id)
+          .single()
+
+        if (error) throw error
+        let profile = profileData as Profile | null
+        if (!profile) {
+          setProfile(null)
+          return
+        }
+        if (profile.role_id) {
+          const { data: roleData } = await supabase.from('roles').select('id, name').eq('id', profile.role_id).single()
+          if (roleData) profile = { ...profile, role_detail: roleData as Role }
+        }
+        setProfile(profile)
       } catch {
         setProfile(null)
       }

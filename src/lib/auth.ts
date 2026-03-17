@@ -1,13 +1,20 @@
 import type { Profile } from '../types'
 
+function roleNameIs(profile: Profile | null, name: string): boolean {
+  if (!profile?.role_detail?.name) return false
+  return profile.role_detail.name.toLowerCase() === name.toLowerCase()
+}
+
 export function isAdmin(profile: Profile | null): boolean {
   if (!profile) return false
-  return profile.role === 'admin' || profile.role_detail?.name === 'Administrador'
+  if (profile.role === 'admin') return true
+  return roleNameIs(profile, 'Administrador')
 }
 
 export function isAttendant(profile: Profile | null): boolean {
   if (!profile) return false
-  return profile.role_detail?.name === 'Atendente' || isAdmin(profile)
+  if (roleNameIs(profile, 'Atendente')) return true
+  return isAdmin(profile)
 }
 
 export function canAccessFullAgenda(profile: Profile | null): boolean {
