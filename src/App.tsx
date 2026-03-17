@@ -56,6 +56,7 @@ function App() {
       setProfile(null)
       return
     }
+    let cancelled = false
     const load = async () => {
       try {
         const { data: profileData, error } = await supabase
@@ -64,6 +65,7 @@ function App() {
           .eq('id', user!.id)
           .single()
 
+        if (cancelled) return
         if (error) throw error
         let profile = profileData as Profile | null
         if (!profile) {
@@ -72,14 +74,16 @@ function App() {
         }
         if (profile.role_id) {
           const { data: roleData } = await supabase.from('roles').select('id, name').eq('id', profile.role_id).single()
+          if (cancelled) return
           if (roleData) profile = { ...profile, role_detail: roleData as Role }
         }
         setProfile(profile)
       } catch {
-        setProfile(null)
+        if (!cancelled) setProfile(null)
       }
     }
     load()
+    return () => { cancelled = true }
   }, [user])
 
   if (loading) {

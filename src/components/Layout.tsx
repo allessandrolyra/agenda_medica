@@ -35,15 +35,20 @@ export default function Layout({ user, profile }: LayoutProps) {
       <Link to="/health" className={navLinkClass} onClick={closeMenu}>
         Health
       </Link>
-      {user ? (
+          {user ? (
         <>
           <Link to="/dashboard" className={navLinkClass} onClick={closeMenu}>
             Painel
           </Link>
           {showAdmin && (
-            <Link to="/cadastro" className={navLinkClass} onClick={closeMenu}>
-              Cadastro
-            </Link>
+            <>
+              <Link to="/cadastro" className={navLinkClass} onClick={closeMenu}>
+                Cadastro
+              </Link>
+              <Link to="/admin" className={navLinkClass} onClick={closeMenu}>
+                {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
+              </Link>
+            </>
           )}
           {showAgenda && (
             <Link to="/agenda" className={navLinkClass} onClick={closeMenu}>
@@ -58,11 +63,6 @@ export default function Layout({ user, profile }: LayoutProps) {
           <Link to="/minhas-consultas" className={navLinkClass} onClick={closeMenu}>
             Minhas Consultas
           </Link>
-          {showAdmin && (
-            <Link to="/admin" className={navLinkClass} onClick={closeMenu}>
-              {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
-            </Link>
-          )}
           <button
             onClick={handleLogout}
             className="w-full text-left py-3 min-h-[44px] px-0 text-slate-600 hover:text-emerald-600 rounded-lg bg-transparent hover:bg-slate-100 border-0"
@@ -112,9 +112,14 @@ export default function Layout({ user, profile }: LayoutProps) {
                   Painel
                 </Link>
                 {showAdmin && (
-                  <Link to="/cadastro" className="py-3 text-slate-600 hover:text-emerald-600">
-                    Cadastro
-                  </Link>
+                  <>
+                    <Link to="/cadastro" className="py-3 text-slate-600 hover:text-emerald-600">
+                      Cadastro
+                    </Link>
+                    <Link to="/admin" className="py-3 text-slate-600 hover:text-emerald-600">
+                      {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
+                    </Link>
+                  </>
                 )}
                 {showAgenda && (
                   <Link to="/agenda" className="py-3 text-slate-600 hover:text-emerald-600">
@@ -129,11 +134,6 @@ export default function Layout({ user, profile }: LayoutProps) {
                 <Link to="/minhas-consultas" className="py-3 text-slate-600 hover:text-emerald-600">
                   Minhas Consultas
                 </Link>
-                {showAdmin && (
-                  <Link to="/admin" className="py-3 text-slate-600 hover:text-emerald-600">
-                    {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
-                  </Link>
-                )}
                 <button
                   onClick={handleLogout}
                   className="px-4 py-3 min-h-[44px] rounded-lg bg-slate-100 hover:bg-slate-200 text-sm"

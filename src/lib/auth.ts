@@ -7,7 +7,8 @@ function roleNameIs(profile: Profile | null, name: string): boolean {
 
 export function isAdmin(profile: Profile | null): boolean {
   if (!profile) return false
-  if (profile.role === 'admin') return true
+  const role = profile.role?.toString?.()?.toLowerCase?.()
+  if (role === 'admin') return true
   return roleNameIs(profile, 'Administrador')
 }
 
