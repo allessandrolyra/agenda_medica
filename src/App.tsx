@@ -21,25 +21,31 @@ function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let cancelled = false
     const init = async () => {
       try {
         const { data: { session } } = await Promise.race([
           supabase.auth.getSession(),
-          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000))
+          new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000))
         ])
-        setUser(session?.user ?? null)
+        if (!cancelled) setUser(session?.user ?? null)
       } catch {
-        setUser(null)
+        if (!cancelled) setUser(null)
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
     init()
+    const timeout = setTimeout(() => setLoading(false), 8000)
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null)
     })
-    return () => subscription.unsubscribe()
+    return () => {
+      cancelled = true
+      clearTimeout(timeout)
+      subscription.unsubscribe()
+    }
   }, [])
 
   useEffect(() => {
