@@ -4,7 +4,7 @@ O site estava mostrando "Carregando Agenda Médica..." porque o GitHub Pages ser
 
 ## ✅ Solução aplicada
 
-O workflow foi alterado para usar **peaceiris/actions-gh-pages**, que envia o build para a branch `gh-pages`.
+O workflow usa o **deploy oficial do GitHub** (`actions/deploy-pages` + `actions/upload-pages-artifact`), sem dependências de terceiros. Isso elimina o aviso de Node.js 20 deprecado.
 
 ## 📋 O que você precisa fazer
 
@@ -19,32 +19,25 @@ https://github.com/allessandrolyra/agenda_medica
 
 ### 3. Em "Build and deployment" → "Source"
 
-Selecione **"Deploy from a branch"** (não "GitHub Actions").
+Selecione **"GitHub Actions"** (não "Deploy from a branch").
 
-### 4. Configure:
+### 4. Salve (Save)
 
-| Campo | Valor |
-|-------|-------|
-| **Branch** | `gh-pages` |
-| **Folder** | `/ (root)` |
-
-### 5. Salve (Save)
-
-### 6. Faça um push para disparar o deploy
+### 5. Faça um push para disparar o deploy
 
 ```bash
 cd "c:/01. Foursys/07. Aulas Criando Agentes .MD/01.Agentes DevOps/Clinica"
 git add .
-git commit -m "fix: deploy via gh-pages branch"
+git commit -m "fix: deploy oficial GitHub Pages (sem warning Node 20)"
 git push origin main
 ```
 
-### 7. Aguarde o workflow
+### 6. Aguarde o workflow
 
 - Vá em **Actions** → aguarde o workflow concluir (✓ verde)
-- A branch `gh-pages` será criada/atualizada com o build
+- O build será enviado diretamente para o GitHub Pages via `actions/deploy-pages`
 
-### 8. Teste
+### 7. Teste
 
 Acesse: https://allessandrolyra.github.io/agenda_medica/
 
@@ -54,6 +47,6 @@ Acesse: https://allessandrolyra.github.io/agenda_medica/
 
 | Antes | Depois |
 |-------|--------|
-| Pages servia a branch `main` (código fonte) | Pages serve a branch `gh-pages` (build) |
-| index.html com `/src/main.tsx` | index.html com `/agenda_medica/assets/xxx.js` |
-| 404 nos scripts | Scripts carregam corretamente |
+| peaceiris/actions-gh-pages (Node 20 deprecado) | actions/deploy-pages (oficial, sem warning) |
+| Source: Deploy from branch (gh-pages) | Source: GitHub Actions |
+| Aviso de depreciação no deploy | Deploy limpo, sem avisos |

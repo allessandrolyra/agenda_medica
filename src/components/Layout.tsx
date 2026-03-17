@@ -55,7 +55,7 @@ export default function Layout({ user, profile }: LayoutProps) {
           </Link>
           {showAdmin && (
             <Link to="/admin" className={navLinkClass} onClick={closeMenu}>
-              Admin
+              {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
             </Link>
           )}
           <button
@@ -121,7 +121,7 @@ export default function Layout({ user, profile }: LayoutProps) {
                 </Link>
                 {showAdmin && (
                   <Link to="/admin" className="py-3 text-slate-600 hover:text-emerald-600">
-                    Admin
+                    {isAdmin(profile ?? null) ? 'Admin' : 'Recepção'}
                   </Link>
                 )}
                 <button

@@ -1,4 +1,4 @@
-// Edge Function: Criar usuário (admin)
+// Edge Function: Criar usuário (admin ou atendente)
 // Requer: SUPABASE_SERVICE_ROLE_KEY
 // Deploy: supabase functions deploy create-user
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
@@ -19,8 +19,9 @@ serve(async (req) => {
     if (!user) return new Response(JSON.stringify({ error: 'Não autenticado' }), { status: 401, headers: cors })
     const adminClient = createClient(supabaseUrl, serviceKey)
     const { data: profile } = await adminClient.from('profiles').select('role_id, role').eq('id', user.id).single()
-    const isAdmin = profile?.role === 'admin' || (profile?.role_id && await checkAdminRole(adminClient, profile.role_id))
-    if (!isAdmin) return new Response(JSON.stringify({ error: 'Sem permissão' }), { status: 403, headers: cors })
+    const canCreate = profile?.role === 'admin' ||
+      (profile?.role_id && await checkRoleCanCreateUser(adminClient, profile.role_id))
+    if (!canCreate) return new Response(JSON.stringify({ error: 'Sem permissão' }), { status: 403, headers: cors })
     const { email, password, full_name, role_id } = await req.json()
     if (!email || !password) return new Response(JSON.stringify({ error: 'Email e senha obrigatórios' }), { status: 400, headers: cors })
     const { data: newUser, error } = await adminClient.auth.admin.createUser({
@@ -40,7 +41,10 @@ serve(async (req) => {
   }
 })
 
-async function checkAdminRole(supabase: any, roleId: string): Promise<boolean> {
-  const { data } = await supabase.from('roles').select('name').eq('id', roleId).single()
-  return data?.name === 'Administrador'
+async function checkRoleCanCreateUser(supabase: any, roleId: string): Promise<boolean> {
+  const { data } = await supabase.from('roles').select('name, permissions').eq('id', roleId).single()
+  if (!data) return false
+  if (data.name === 'Administrador') return true
+  if (data.name === 'Atendente' && Array.isArray(data.permissions) && data.permissions.includes('users.create')) return true
+  return false
 }
