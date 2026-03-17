@@ -4,6 +4,8 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.VITE_BASE_PATH || '/', // GitHub Pages: '/agenda-medica/' (definido no workflow)
+  // GitHub Pages: base = /nome-do-repo/ (definido no workflow via VITE_BASE_PATH)
+  // Local: base = '/' (fallback)
+  base: process.env.VITE_BASE_PATH || '/',
   resolve: { alias: { '@': path.resolve(__dirname, './src') } },
 })
