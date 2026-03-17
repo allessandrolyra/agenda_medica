@@ -172,25 +172,6 @@ Colaboração → documentação e checklists
 
 ---
 
-## 💡 Sugestões de melhorias (Visionary – Agente de Arquitetura)
-
-O agente **Visionary** (10_arquitetura_solucao) recomenda as seguintes evoluções para este README e para o projeto:
-
-### Para o README
-- ✅ Estrutura clara com seções bem definidas
-- ✅ Tabelas para facilitar leitura
-- ✅ Links para documentação relacionada
-- ✅ Lista de agentes com responsabilidades
-- **Sugestão:** Adicionar badges (build status, licença) quando o repo estiver no GitHub
-- **Sugestão:** Incluir screenshots ou GIF da aplicação em uso
-
-### Para o projeto
-- Considerar testes automatizados (agente **Pulse**)
-- Configurar monitoramento de disponibilidade (agente **Watcher**)
-- Revisar vulnerabilidades com `npm audit` (agente **Shield**)
-
----
-
 ## 📄 Licença
 
-MIT – Livre para uso e publicação.
+MIT – Livre para uso e publicação e Testes
