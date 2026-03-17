@@ -2,6 +2,18 @@
 
 Sistema web completo para clínicas médicas gerenciarem agendamentos de consultas. Pacientes agendam online (quando liberados), atendentes e secretárias têm agenda completa, e administradores controlam médicos, horários e usuários.
 
+**Site:** [https://allessandrolyra.github.io/agenda_medica](https://allessandrolyra.github.io/agenda_medica)
+
+---
+
+## 📘 Configuração completa (passo a passo)
+
+**Guia detalhado** para configurar o programa **localmente** e no **GitHub**, com contribuições de todos os agentes DevOps:
+
+👉 **[PROCEDIMENTO_CONFIGURACAO_COMPLETO.md](./PROCEDIMENTO_CONFIGURACAO_COMPLETO.md)**
+
+Inclui: pré-requisitos, Supabase, Git, deploy, troubleshooting do "Carregando Agenda Médica..." e comandos Git Bash.
+
 ---
 
 ## 📌 O que este programa faz
@@ -166,8 +178,11 @@ Colaboração → documentação e checklists
 
 | Documento | Conteúdo |
 |-----------|----------|
+| [PROCEDIMENTO_CONFIGURACAO_COMPLETO.md](./PROCEDIMENTO_CONFIGURACAO_COMPLETO.md) | **Guia completo** – local, Git, GitHub, Supabase, deploy |
 | [CHECKLIST_SUPABASE.md](./CHECKLIST_SUPABASE.md) | Passo a passo para configurar o Supabase |
 | [DEPLOY_GITHUB.md](./DEPLOY_GITHUB.md) | Como publicar no GitHub e GitHub Pages |
+| [DIAGNOSTICO_CARREGANDO.md](./DIAGNOSTICO_CARREGANDO.md) | Diagnóstico "Carregando Agenda Médica..." |
+| [TROUBLESHOOTING_LOGIN.md](./TROUBLESHOOTING_LOGIN.md) | Login e esqueci a senha |
 | [RELATORIO_ANALISE_CODIGO.md](./RELATORIO_ANALISE_CODIGO.md) | Análise do agente Insight – boas práticas e performance |
 
 ---

@@ -24,6 +24,7 @@ Execute cada script **na ordem abaixo**, copiando e colando o conteúdo completo
 | 3 | `supabase/migrations/002_can_self_book.sql` | [ ] |
 | 4 | `supabase/migrations/003_attendant_update_can_self_book.sql` | [ ] |
 | 5 | `supabase/migrations/004_initial_admin_setup.sql` | [ ] |
+| 6 | `supabase/migrations/005_fix_handle_new_user.sql` | [ ] |
 
 **Como fazer:**
 1. Abra o arquivo no VS Code
@@ -64,11 +65,11 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 - [ ] Ir em **Authentication** → **Providers**
 - [ ] Confirmar que **Email** está habilitado
 - [ ] Ir em **Authentication** → **URL Configuration**
-- [ ] Em **Site URL**, colocar: `http://localhost:5173`
-- [ ] Em **Redirect URLs**, adicionar:
-  - `http://localhost:5173/**`
-  - `https://seu-usuario.github.io/**` (ajustar depois do deploy)
-- [ ] **Esqueci a senha**: as URLs acima cobrem `/reset-password`. Se usar subpath (ex: GitHub Pages), adicione também: `https://seu-usuario.github.io/agenda_medica/reset-password`
+- [ ] Em **Site URL** (produção): `https://seu-usuario.github.io/agenda_medica/`
+- [ ] Em **Redirect URLs**, adicionar **ambas**:
+  - `http://localhost:5173/**` (desenvolvimento local)
+  - `https://seu-usuario.github.io/agenda_medica/**` (produção – ajustar usuário e nome do repo)
+- [ ] **Importante:** Use o nome exato do repositório (ex: `agenda_medica` com underscore)
 
 ---
 

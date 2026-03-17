@@ -72,7 +72,8 @@ Se o build falhou, o site não será atualizado.
 | Causa | Solução |
 |------|---------|
 | URL errada | Usar `.../agenda_medica/` (underscore, barra no final) |
-| Base path errado | Ajuste no vite.config (já feito) |
+| Base path errado | Workflow usa `VITE_BASE_PATH: /agenda_medica/` (path absoluto) |
+| Supabase URL | Site URL e Redirect URLs devem ser da **produção**, não localhost |
 | Build falhou | Conferir Actions e secrets |
 | Pages desativado | Settings → Pages → Source: GitHub Actions |
 
@@ -85,3 +86,18 @@ Essa mensagem vem do HTML estático, antes do React carregar.
 Se o JS carregasse, você veria "Carregando..." (spinner do React) e, em até 8 segundos, a tela mudaria.
 
 **Conclusão:** o problema é o carregamento dos arquivos JavaScript (404), não o Supabase.
+
+---
+
+## Correção aplicada (base path)
+
+O workflow `.github/workflows/deploy.yml` foi ajustado para usar **path absoluto**:
+
+```yaml
+VITE_BASE_PATH: /${{ github.event.repository.name }}/
+VITE_APP_BASENAME: /${{ github.event.repository.name }}/
+```
+
+Isso evita 404 nos assets quando o site é servido em `https://usuario.github.io/agenda_medica/`.
+
+**Após essa alteração:** faça um novo push para disparar o deploy.
